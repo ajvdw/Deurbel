@@ -2,13 +2,13 @@
 // Author: A.J. VAN DE WERKEN
 // Date: 3 November 2018
 //
-// ATMEL ATTINY 25/45/85 / ARDUINO
-//          --_-- 
-//         1|   |8  Vcc
-// SWITCH  2|   |7  
-//         3|   |6  LED
-//    Gnd  4|   |5  
-//          -----
+//    VCC   LED
+//   __#__#__#__#__
+//  |  8  7  6  5  |     
+//  )   ATTINY85   |
+//  |__1__2__3__4__|
+//     #  #  #  #
+//       SW    GND
 
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
@@ -26,7 +26,8 @@ void setup()
 
 ISR(PCINT0_vect) 
 {
-    // This is called when the interrupt occurs, but I don't need to do anything in it
+    // This is called when the interrupts PCINT0..5 occur, 
+    // but I don't need to do anything in it
 }
 
 void loop() 
@@ -37,7 +38,8 @@ void loop()
     ADCSRA &= ~_BV(ADEN);                  
     set_sleep_mode(SLEEP_MODE_PWR_DOWN);    
     sleep_enable();                         
-    sei();                                  
+    sei();    
+    // Sleep and wait for wakeup                              
     sleep_cpu();                            
     cli();                       
     PCMSK &= ~_BV(PCINT3);                  
